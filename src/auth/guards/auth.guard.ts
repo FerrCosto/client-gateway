@@ -9,13 +9,11 @@ import { ClientProxy } from '@nestjs/microservices';
 
 import { Request } from 'express';
 import { firstValueFrom } from 'rxjs';
-import { envs } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    @Inject(envs.NATS_SERVERS) private readonly client: ClientProxy,
-  ) {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
