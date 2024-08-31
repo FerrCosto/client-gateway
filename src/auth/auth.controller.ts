@@ -1,16 +1,17 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { envs } from 'src/config';
+
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { catchError } from 'rxjs';
 import { Token, User } from './decorators';
 import { CurrentUser } from './interfaces';
 import { AuthGuard } from './guards/auth.guard';
+import { NATS_SERVICE } from 'src/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    @Inject(envs.NATS_SERVERS)
+    @Inject(NATS_SERVICE)
     private readonly client: ClientProxy,
   ) {}
 
