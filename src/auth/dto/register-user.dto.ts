@@ -9,6 +9,14 @@ import {
 
 import { Roles } from '../enums/roles-user.enum';
 
+export class Direccion {
+  @IsString()
+  city: string;
+  @IsString()
+  street: string;
+  @IsInt()
+  postal: number;
+}
 export class RegisterUserDto {
   @IsString()
   fullName: string;
@@ -22,13 +30,4 @@ export class RegisterUserDto {
   telefono: number;
   @IsEnum(Roles, { each: true })
   roles: Roles[] = [Roles.CLIENT];
-}
-
-export class Direccion {
-  @IsString()
-  city: string;
-  @IsString()
-  street: string;
-  @IsInt()
-  postal: number;
 }
