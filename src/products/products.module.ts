@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ProductsService } from './products.service';
+
 import { ProductsResolver } from './products.resolver';
+import { NatsModule } from 'src/transports/nats.module';
 
 @Module({
-  providers: [ProductsResolver, ProductsService],
+  imports: [NatsModule],
+  providers: [ProductsResolver],
 })
 export class ProductsModule {}

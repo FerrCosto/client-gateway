@@ -1,35 +1,40 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { ProductsService } from './products.service';
-import { Product } from './entities/product.entity';
-import { CreateProductInput } from './dto/create-product.input';
-import { UpdateProductInput } from './dto/update-product.input';
+import { Product } from './entities/products.entity';
+import { CreateProdctsInput, UpdateProductsInput } from './dto/inputs';
+import { Inject } from '@nestjs/common';
+import { NATS_SERVICE } from 'src/config';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Resolver(() => Product)
 export class ProductsResolver {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Mutation(() => Product)
-  createProduct(@Args('createProductInput') createProductInput: CreateProductInput) {
-    return this.productsService.create(createProductInput);
+  createProduct(
+    @Args('createProductInput') createProductInput: CreateProdctsInput,
+  ) {
+    return this.client.send('', createProductInput);
   }
 
   @Query(() => [Product], { name: 'products' })
   findAll() {
-    return this.productsService.findAll();
+    return this.client.emit('', {});
   }
 
   @Query(() => Product, { name: 'product' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.productsService.findOne(id);
+    return this.client.send('', id);
   }
 
   @Mutation(() => Product)
-  updateProduct(@Args('updateProductInput') updateProductInput: UpdateProductInput) {
-    return this.productsService.update(updateProductInput.id, updateProductInput);
+  updateProduct(
+    @Args('updateProductInput') updateProductInput: UpdateProductsInput,
+  ) {
+    return this.client.send('', updateProductInput);
   }
 
   @Mutation(() => Product)
   removeProduct(@Args('id', { type: () => Int }) id: number) {
-    return this.productsService.remove(id);
+    return this.client.send('', id);
   }
 }
