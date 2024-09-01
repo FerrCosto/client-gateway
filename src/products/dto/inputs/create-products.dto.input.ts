@@ -7,6 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ImgProductsInput } from './sub-products.dto.input';
+import { CategoryProductsInput } from './category';
 
 @InputType()
 export class CreateProdctsInput {
@@ -24,6 +25,7 @@ export class CreateProdctsInput {
   @Field(() => [ImgProductsInput])
   @IsArray()
   img_Products: ImgProductsInput[];
-  //   @IsObject()
-  //   categoryProducts: CategoryProducts;
+  @Field(() => CategoryProductsInput)
+  @IsObject()
+  categoryProducts: CategoryProductsInput;
 }
