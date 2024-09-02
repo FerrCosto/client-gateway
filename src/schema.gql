@@ -1,0 +1,84 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CategoryProducts {
+  id: ID!
+  name: String!
+}
+
+type ImgProducts {
+  id: ID!
+  url: String!
+  alt: String
+  state_image: StateImage!
+}
+
+enum StateImage {
+  HOVER
+  NORMAL
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  date_update: String!
+  price: String!
+  img_products: [ImgProducts!]!
+}
+
+type Query {
+  findAllCategory: [CategoryProducts!]!
+  findOneCategory(value: FindByValueInput!): CategoryProducts!
+  findAllProducts: [Product!]!
+  findOneProduct(id: Int!): Product!
+}
+
+input FindByValueInput {
+  id: Int
+  name: String
+}
+
+type Mutation {
+  createCategory(createProductInput: CategoryProductsInput!): CategoryProducts!
+  deleteCategory(name: String!): CategoryProducts!
+  createProduct(updateProductInput: CreateProdctsInput!): Product!
+  updateProduct(updateProductInput: UpdateProductsInput!): Product!
+  removeProduct(id: Int!): Product!
+}
+
+input CategoryProductsInput {
+  name: String!
+}
+
+input CreateProdctsInput {
+  name: String!
+  description: String
+  price: String!
+  img_Products: [ImgProductsInput!]!
+  categoryProducts: CategoryProductsInput!
+}
+
+input ImgProductsInput {
+  url: String!
+  alt: String
+  state_image: StateImage!
+}
+
+input UpdateProductsInput {
+  id: Int!
+  name: String
+  description: String
+  price: String
+  img_Products: [ImgProductsEditInput!]
+  categoryProducts: CategoryProductsInput!
+}
+
+input ImgProductsEditInput {
+  id: Int
+  url: String
+  alt: String
+  state_image: StateImage
+  delete: Boolean = false
+}

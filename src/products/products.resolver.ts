@@ -1,12 +1,13 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { Product } from './entities/products.entity';
 import { CreateProdctsInput, UpdateProductsInput } from './dto/inputs';
-import { Inject } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy } from '@nestjs/microservices';
 import { CategoryProductsInput, FindByValueInput } from './dto/inputs/category';
 import { CategoryProducts } from './entities';
-
+import { AuthGuard } from '../auth/guards/auth.guard';
+@UseGuards(AuthGuard)
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
