@@ -32,7 +32,7 @@ export class UpdateProductsInput {
   @IsArray()
   @IsOptional()
   img_Products?: ImgProductsEditInput[];
-  @Field(() => CategoryProductsInput)
+  @Field(() => CategoryProductsInput, { nullable: true })
   @IsObject()
   @IsOptional()
   categoryProducts?: CategoryProductsInput;

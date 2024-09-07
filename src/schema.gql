@@ -72,7 +72,7 @@ input UpdateProductsInput {
   description: String
   price: String
   img_Products: [ImgProductsEditInput!]
-  categoryProducts: CategoryProductsInput!
+  categoryProducts: CategoryProductsInput
 }
 
 input ImgProductsEditInput {
