@@ -57,7 +57,7 @@ export class ProductsResolver {
   @Query(() => Product, { name: 'findOneProduct' })
   findOneProduct(
     @Args('id', { type: () => Int }) id: number,
-    @CurrentUsers() admin: CurrentUser,
+    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) admin: CurrentUser,
   ) {
     return this.client.send('product.findOne', id);
   }

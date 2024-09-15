@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config/envs.config';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import { RpcCustomExceptionFilter } from './common/exceptions/rcp-custom-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
       },
     ],
   });
+  app.useGlobalFilters(new RpcCustomExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
