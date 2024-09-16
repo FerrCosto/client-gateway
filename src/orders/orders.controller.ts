@@ -15,14 +15,21 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { NATS_SERVICE } from '../config/service.config';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CurrentUsers } from 'src/auth/decorators/current-user.decorator';
 
-@Controller('orders')
+import { CurrentUser } from 'src/auth/interfaces';
+import { Roles } from 'src/auth/enums/roles-user.enum';
+
 @UseGuards(AuthGuard)
+@Controller('orders')
 export class OrdersController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
+  create(
+    @Body() createOrderDto: CreateOrderDto,
+    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+  ) {
     return this.client.send('order.create', createOrderDto);
   }
 
