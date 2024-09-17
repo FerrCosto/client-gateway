@@ -8,12 +8,14 @@ import {
   Delete,
   Inject,
   UseGuards,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NATS_SERVICE } from '../config/service.config';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUsers } from 'src/auth/decorators/current-user.decorator';
 
@@ -26,7 +28,7 @@ export class OrdersController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Post()
-  create(
+  async create(
     @Body() createOrderDto: CreateOrderDto,
     @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
   ) {
