@@ -54,19 +54,4 @@ export class OrdersController {
   remove(@Param('id') id: string) {
     return this.client.send('order.remove', +id);
   }
-  @Get('payments/success')
-  success() {
-    return {
-      ok: true,
-      message: 'Payment successful',
-    };
-  }
-
-  @Get('payments/cancel')
-  cancel() {
-    return {
-      ok: false,
-      message: 'Payment cancelled',
-    };
-  }
 }
