@@ -18,7 +18,7 @@ import {
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NATS_SERVICE } from '../config/service.config';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUsers } from 'src/auth/decorators/current-user.decorator';
 
@@ -91,8 +91,12 @@ export class OrdersController {
     @Param('id', ParseIntPipe) id: number,
     @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
   ) {
-    const { id: userId, ...data } = user;
-    return this.client.send('order.findOne', { id, userId });
+    try {
+      const { id: userId, ...data } = user;
+      return this.client.send('order.findOne', { id, userId });
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
   @Patch(':id')
