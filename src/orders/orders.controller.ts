@@ -27,7 +27,6 @@ import { Roles } from 'src/auth/enums/roles-user.enum';
 
 import { firstValueFrom } from 'rxjs';
 import { Response } from 'express';
-import { Readable } from 'stream';
 
 @UseGuards(AuthGuard)
 @Controller('orders')
@@ -39,7 +38,13 @@ export class OrdersController {
     @Body() createOrderDto: CreateOrderDto,
     @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
   ) {
-    return this.client.send('order.create', createOrderDto);
+    const { id: userId, ...data } = user;
+
+    const orderData = {
+      ...createOrderDto,
+      userId,
+    };
+    return this.client.send('order.create', orderData);
   }
 
   @Get()
@@ -51,28 +56,30 @@ export class OrdersController {
   async findInvoiceOrder(
     @Query('order', ParseIntPipe) orderId: number,
     @Res() response: Response,
+    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
   ) {
     try {
-      // Obtener la orden pagada
-      const orderPaid = await firstValueFrom(
-        this.client.send('order.findOnePaid', orderId),
-      );
+      const { id: userId, ...data } = user;
 
-      // Generar el PDF utilizando el servicio de factura
+      const orderPaidData = {
+        id: orderId,
+        userId,
+      };
+
+      const orderPaid = await firstValueFrom(
+        this.client.send('order.findOnePaid', orderPaidData),
+      );
+      console.log(orderPaid);
+
       const invoiceOrder = await firstValueFrom(
         this.client.send('factura.create', orderPaid),
       );
 
-      // Configurar los encabezados de la respuesta
       response.setHeader('Content-Type', 'application/pdf');
 
-      response.setHeader(
-        'Content-Disposition',
-        'inline; filename=factura.pdf', // Cambiar a 'inline' si deseas que se muestre en el navegador
-      );
+      response.setHeader('Content-Disposition', 'inline; filename=factura.pdf');
       const pdf = Buffer.from(invoiceOrder, 'base64');
 
-      // Enviar el buffer del PDF como respuesta
       response.end(pdf);
     } catch (error) {
       console.log(error);
@@ -80,8 +87,12 @@ export class OrdersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.client.send('order.findOne', +id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+  ) {
+    const { id: userId, ...data } = user;
+    return this.client.send('order.findOne', { id, userId });
   }
 
   @Patch(':id')
