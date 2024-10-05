@@ -25,7 +25,7 @@ import { CurrentUsers } from 'src/auth/decorators/current-user.decorator';
 import { CurrentUser } from 'src/auth/interfaces';
 import { Roles } from 'src/auth/enums/roles-user.enum';
 
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { Response } from 'express';
 
 @UseGuards(AuthGuard)
@@ -91,12 +91,13 @@ export class OrdersController {
     @Param('id', ParseIntPipe) id: number,
     @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
   ) {
-    try {
-      const { id: userId, ...data } = user;
-      return this.client.send('order.findOne', { id, userId });
-    } catch (error) {
-      throw new RpcException(error);
-    }
+    const { id: userId, ...data } = user;
+
+    return this.client.send('order.findOne', { id, userId }).pipe(
+      catchError((err) => {
+        throw new RpcException(err);
+      }),
+    );
   }
 
   @Patch(':id')
