@@ -56,10 +56,10 @@ export class OrdersController {
   async findInvoiceOrder(
     @Query('order', ParseIntPipe) orderId: number,
     @Res() response: Response,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) infoUser: CurrentUser,
   ) {
     try {
-      const { id: userId, ...data } = user;
+      const { id: userId, roles, ...user } = infoUser;
 
       const orderPaidData = {
         id: orderId,
@@ -71,8 +71,13 @@ export class OrdersController {
       );
       console.log(orderPaid);
 
+      const fullData = {
+        user,
+        order: orderPaid,
+      };
+
       const invoiceOrder = await firstValueFrom(
-        this.client.send('factura.create', orderPaid),
+        this.client.send('factura.create', fullData),
       );
 
       response.setHeader('Content-Type', 'application/pdf');
@@ -82,7 +87,7 @@ export class OrdersController {
 
       response.end(pdf);
     } catch (error) {
-      console.log(error);
+      throw new RpcException(error);
     }
   }
 
