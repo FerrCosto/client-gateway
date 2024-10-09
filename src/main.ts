@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { envs } from './config/envs.config';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common/exceptions/rcp-custom-exception.filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,14 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  const config = new DocumentBuilder()
+    .setTitle('Ferreteria Backend ')
+    .setDescription('Backend de la ferreteria')
+    .setVersion('1.0')
+    .addTag('Ferreteria')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   await app.listen(envs.port);
 }
 bootstrap();
