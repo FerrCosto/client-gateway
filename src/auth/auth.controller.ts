@@ -7,7 +7,13 @@ import { Token, User } from './decorators';
 import { CurrentUser } from './interfaces';
 import { AuthGuard } from './guards/auth.guard';
 import { NATS_SERVICE } from 'src/config';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -51,16 +57,18 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('verify')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token to authenticate the request',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description:
       'Devuelve la informacion del usuario necesaria y su token de autentificación',
   })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiBody({ description: 'Informacion del usuario', type: LoginUserDto })
   verifyToken(@User() user: CurrentUser, @Token() token: string) {
     return { user, token };

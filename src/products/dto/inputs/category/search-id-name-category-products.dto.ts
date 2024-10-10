@@ -9,13 +9,19 @@ import {
 } from 'class-validator';
 @InputType()
 export class FindByValueInput {
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int, {
+    nullable: true,
+    description: 'Id para buscar la categoria',
+  })
   @IsInt()
   @Min(1)
   @IsPositive()
   @IsOptional()
   id?: number;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Nombre para buscar la categoria',
+  })
   @IsOptional()
   @IsString()
   @MinLength(1)

@@ -15,7 +15,10 @@ import { Roles } from 'src/auth/enums/roles-user.enum';
 export class ProductsResolver {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
-  @Mutation(() => CategoryProducts, { name: 'createCategory' })
+  @Mutation(() => CategoryProducts, {
+    name: 'createCategory',
+    description: 'Creacion del producto',
+  })
   createCategory(
     @Args('createProductInput') categoryProductsInput: CategoryProductsInput,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
@@ -23,19 +26,28 @@ export class ProductsResolver {
     return this.client.send('product.category.create', categoryProductsInput);
   }
 
-  @Query(() => [CategoryProducts], { name: 'findAllCategory' })
+  @Query(() => [CategoryProducts], {
+    name: 'findAllCategory',
+    description: 'Consulta de las categorias',
+  })
   findAllCategories() {
     return this.client.send('product.category.finAll', {});
   }
 
-  @Query(() => CategoryProducts, { name: 'findOneCategory' })
+  @Query(() => CategoryProducts, {
+    name: 'findOneCategory',
+    description: 'Consultar una categoria por id o nombre',
+  })
   findOne(
     @Args('value', { type: () => FindByValueInput }) value: FindByValueInput,
   ) {
     return this.client.send('product.category.findOne', value);
   }
 
-  @Mutation(() => CategoryProducts, { name: 'deleteCategory' })
+  @Mutation(() => CategoryProducts, {
+    name: 'deleteCategory',
+    description: 'Eliminacion de la categoria por medio del nombre',
+  })
   deleteCategory(
     @Args('name') name: string,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
@@ -43,18 +55,27 @@ export class ProductsResolver {
     return this.client.send('product.category.delete', name);
   }
 
-  @Mutation(() => Product, { name: 'createProduct' })
+  @Mutation(() => Product, {
+    name: 'createProduct',
+    description: 'Creación de un producto',
+  })
   createProduct(
     @Args('updateProductInput') createProductInput: CreateProdctsInput,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
   ) {
     return this.client.send('product.create', createProductInput);
   }
-  @Query(() => [Product], { name: 'findAllProducts' })
+  @Query(() => [Product], {
+    name: 'findAllProducts',
+    description: 'Consulta de todos los productos ',
+  })
   findAllProducts() {
     return this.client.send('product.findAll', {});
   }
-  @Query(() => Product, { name: 'findOneProduct' })
+  @Query(() => Product, {
+    name: 'findOneProduct',
+    description: 'Consulta de un producto por medio del id',
+  })
   findOneProduct(
     @Args('id', { type: () => Int }) id: number,
     @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) admin: CurrentUser,
@@ -62,14 +83,20 @@ export class ProductsResolver {
     return this.client.send('product.findOne', id);
   }
 
-  @Mutation(() => Product, { name: 'updateProduct' })
+  @Mutation(() => Product, {
+    name: 'updateProduct',
+    description: 'Modifiación de un producto ',
+  })
   updateProduct(
     @Args('updateProductInput') updateProductsInput: UpdateProductsInput,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
   ) {
     return this.client.send('product.update', updateProductsInput);
   }
-  @Mutation(() => Product)
+  @Mutation(() => Product, {
+    name: 'deleteProduct',
+    description: 'Eliminacion del producto por medio del id ',
+  })
   removeProduct(
     @Args('id', { type: () => Int }) id: number,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,

@@ -3,12 +3,19 @@ import { StateImage } from '../enums/state-image.enum';
 
 @ObjectType()
 export class ImgProducts {
-  @Field(() => ID)
+  @Field(() => ID, { description: 'Id de la imagen relaciona al producto' })
   id: number;
-  @Field(() => String)
+  @Field(() => String, {
+    description: 'Url de la imagen relaciona al producto',
+  })
   url: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripción de la imagen relaciona al producto',
+  })
   alt?: string;
-  @Field(() => StateImage)
+  @Field(() => StateImage, {
+    description: 'Estado de la imagen relaciona al producto',
+  })
   state_image: StateImage;
 }

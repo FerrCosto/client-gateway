@@ -4,13 +4,16 @@ import { StateImage } from 'src/products/enums/state-image.enum';
 
 @InputType()
 export class ImgProductsInput {
-  @Field(() => String)
+  @Field(() => String, { description: 'Url de la imagen del producto' })
   @IsUrl()
   url: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripcion de la imagen si llegara a tener',
+  })
   @IsString()
   alt?: string;
-  @Field(() => StateImage)
+  @Field(() => StateImage, { description: 'Estado de la imagen ' })
   @IsEnum(() => StateImage)
   state_image: StateImage;
 }

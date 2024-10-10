@@ -11,21 +11,26 @@ import { CategoryProductsInput } from './category';
 
 @InputType()
 export class CreateProdctsInput {
-  @Field(() => String)
+  @Field(() => String, { description: 'Nombre del producto' })
   @IsString()
   @MinLength(1)
   name: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripción del producto si deberia tener',
+  })
   @IsOptional()
   @IsString()
   description?: string;
-  @Field(() => String)
+  @Field(() => String, { description: 'Precio del Producto' })
   @IsString()
   price: string;
-  @Field(() => [ImgProductsInput])
+  @Field(() => [ImgProductsInput], {
+    description: 'Imagenes del producto asociado',
+  })
   @IsArray()
   img_Products: ImgProductsInput[];
-  @Field(() => CategoryProductsInput)
+  @Field(() => CategoryProductsInput, { description: 'Categoria del producto' })
   @IsObject()
   categoryProducts: CategoryProductsInput;
 }

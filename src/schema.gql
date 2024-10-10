@@ -3,14 +3,24 @@
 # ------------------------------------------------------
 
 type CategoryProducts {
+  """Id de la categoria"""
   id: ID!
+
+  """Nombre de la categoria"""
   name: String!
 }
 
 type ImgProducts {
+  """Id de la imagen relaciona al producto"""
   id: ID!
+
+  """Url de la imagen relaciona al producto"""
   url: String!
+
+  """Descripción de la imagen relaciona al producto"""
   alt: String
+
+  """Estado de la imagen relaciona al producto"""
   state_image: StateImage!
 }
 
@@ -20,65 +30,130 @@ enum StateImage {
 }
 
 type Product {
+  """Id del producto"""
   id: ID!
+
+  """Nombre del producto"""
   name: String!
+
+  """Descripción del producto"""
   description: String
+
+  """Fecha de modificacion del producto"""
   date_update: String!
+
+  """Precio del del producto"""
   price: String!
+
+  """Imagenes del producto"""
   img_products: [ImgProducts!]!
 }
 
 type Query {
+  """Consulta de las categorias"""
   findAllCategory: [CategoryProducts!]!
+
+  """Consultar una categoria por id o nombre"""
   findOneCategory(value: FindByValueInput!): CategoryProducts!
+
+  """Consulta de todos los productos """
   findAllProducts: [Product!]!
+
+  """Consulta de un producto por medio del id"""
   findOneProduct(id: Int!): Product!
 }
 
 input FindByValueInput {
+  """Id para buscar la categoria"""
   id: Int
+
+  """Nombre para buscar la categoria"""
   name: String
 }
 
 type Mutation {
+  """Creacion del producto"""
   createCategory(createProductInput: CategoryProductsInput!): CategoryProducts!
+
+  """Eliminacion de la categoria por medio del nombre"""
   deleteCategory(name: String!): CategoryProducts!
+
+  """Creación de un producto"""
   createProduct(updateProductInput: CreateProdctsInput!): Product!
+
+  """Modifiación de un producto """
   updateProduct(updateProductInput: UpdateProductsInput!): Product!
-  removeProduct(id: Int!): Product!
+
+  """Eliminacion del producto por medio del id """
+  deleteProduct(id: Int!): Product!
 }
 
 input CategoryProductsInput {
+  """El nombre de la categoria"""
   name: String!
 }
 
 input CreateProdctsInput {
+  """Nombre del producto"""
   name: String!
+
+  """Descripción del producto si deberia tener"""
   description: String
+
+  """Precio del Producto"""
   price: String!
+
+  """Imagenes del producto asociado"""
   img_Products: [ImgProductsInput!]!
+
+  """Categoria del producto"""
   categoryProducts: CategoryProductsInput!
 }
 
 input ImgProductsInput {
+  """Url de la imagen del producto"""
   url: String!
+
+  """Descripcion de la imagen si llegara a tener"""
   alt: String
+
+  """Estado de la imagen """
   state_image: StateImage!
 }
 
 input UpdateProductsInput {
+  """Id del producto a modificar"""
   id: Int!
+
+  """Nombre del producto a modificar"""
   name: String
+
+  """Descripción del productoa modificar"""
   description: String
+
+  """Precio del producto a modificar"""
   price: String
+
+  """Imagenes del producto a modificar"""
   img_Products: [ImgProductsEditInput!]
+
+  """Nombre de la categoria del producto a modificar"""
   categoryProducts: CategoryProductsInput
 }
 
 input ImgProductsEditInput {
+  """Id de la imagen del producto a modificar"""
   id: Int
+
+  """Url de la imagen del producto """
   url: String
+
+  """Descripción para la imagen si llegara a tener"""
   alt: String
+
+  """El estado de la imagen"""
   state_image: StateImage
+
+  """Si se desea es eliminar la imagen"""
   delete: Boolean = false
 }

@@ -4,17 +4,20 @@ import { ImgProducts } from './';
 
 @ObjectType()
 export class Product {
-  @Field(() => ID)
+  @Field(() => ID, { description: 'Id del producto' })
   id: number;
-  @Field(() => String)
+  @Field(() => String, { description: 'Nombre del producto' })
   name: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripción del producto',
+  })
   description?: string;
-  @Field(() => String)
+  @Field(() => String, { description: 'Fecha de modificacion del producto' })
   date_update: string;
-  @Field(() => String)
+  @Field(() => String, { description: 'Precio del del producto' })
   price: string;
-  @Field(() => [ImgProducts])
+  @Field(() => [ImgProducts], { description: 'Imagenes del producto' })
   img_products: ImgProducts[];
 
   //   categoryproducts: CategoryProductsDto;

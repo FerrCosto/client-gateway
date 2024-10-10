@@ -12,27 +12,42 @@ import { CategoryProductsInput } from './category';
 
 @InputType()
 export class UpdateProductsInput {
-  @Field(() => Int)
+  @Field(() => Int, { description: 'Id del producto a modificar' })
   @IsInt()
   id: number;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Nombre del producto a modificar',
+  })
   @IsString()
   @IsOptional()
   @MinLength(1)
   name?: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripción del productoa modificar',
+  })
   @IsOptional()
   @IsString()
   description?: string;
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    description: 'Precio del producto a modificar',
+  })
   @IsString()
   @IsOptional()
   price?: string;
-  @Field(() => [ImgProductsEditInput], { nullable: true })
+  @Field(() => [ImgProductsEditInput], {
+    nullable: true,
+    description: 'Imagenes del producto a modificar',
+  })
   @IsArray()
   @IsOptional()
   img_Products?: ImgProductsEditInput[];
-  @Field(() => CategoryProductsInput, { nullable: true })
+  @Field(() => CategoryProductsInput, {
+    nullable: true,
+    description: 'Nombre de la categoria del producto a modificar',
+  })
   @IsObject()
   @IsOptional()
   categoryProducts?: CategoryProductsInput;
