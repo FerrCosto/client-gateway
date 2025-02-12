@@ -4,7 +4,7 @@ import { envs } from './config/envs.config';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common/exceptions/rcp-custom-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+// Cambios
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api', {
