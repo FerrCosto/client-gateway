@@ -3,7 +3,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { catchError } from 'rxjs';
-import { Token, User } from './decorators';
+import { Token } from './decorators';
 import { CurrentUser } from './interfaces';
 import { AuthGuard } from './guards/auth.guard';
 import { NATS_SERVICE } from 'src/config';
@@ -70,7 +70,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @ApiBody({ description: 'Informacion del usuario', type: LoginUserDto })
-  verifyToken(@User() user: CurrentUser, @Token() token: string) {
-    return { user, token };
+  verifyToken(@Token() token: string) {
+    return { token };
   }
 }

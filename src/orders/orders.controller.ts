@@ -56,7 +56,7 @@ export class OrdersController {
   })
   async create(
     @Body() createOrderDto: CreateOrderDto,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) user: CurrentUser,
   ) {
     const { id: userId, ...data } = user;
 
@@ -86,7 +86,7 @@ export class OrdersController {
     status: 500,
     description: 'Internal Server Error',
   })
-  findAll(@CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser) {
+  findAll(@CurrentUsers(Roles.ADMIN || Roles.CLIENT) user: CurrentUser) {
     const { id: userId, ...data } = user;
     return this.client.send('orders.findAll', userId).pipe(
       catchError((error) => {
@@ -126,10 +126,10 @@ export class OrdersController {
   async findInvoiceOrder(
     @Query('order', ParseIntPipe) orderId: number,
     @Res() response: Response,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) infoUser: CurrentUser,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) infoUser: CurrentUser,
   ) {
     try {
-      const { id: userId, roles, ...user } = infoUser;
+      const { id: userId, role, ...user } = infoUser;
 
       const orderPaidData = {
         id: orderId,
@@ -183,7 +183,7 @@ export class OrdersController {
   })
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) user: CurrentUser,
   ) {
     const { id: userId, ...data } = user;
 
@@ -216,7 +216,7 @@ export class OrdersController {
   })
   remove(
     @Param('id') id: string,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) user: CurrentUser,
   ) {
     return this.client.send('order.remove', +id);
   }

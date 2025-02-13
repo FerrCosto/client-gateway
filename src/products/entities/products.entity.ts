@@ -13,6 +13,10 @@ export class Product {
     description: 'Descripción del producto',
   })
   description?: string;
+  @Field(() => String, {
+    description: 'Slug del producto',
+  })
+  slug: string;
   @Field(() => String, { description: 'Fecha de modificacion del producto' })
   date_update: string;
   @Field(() => String, { description: 'Precio del del producto' })

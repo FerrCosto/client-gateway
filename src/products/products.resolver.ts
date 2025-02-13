@@ -21,8 +21,9 @@ export class ProductsResolver {
   })
   createCategory(
     @Args('createProductInput') categoryProductsInput: CategoryProductsInput,
-    @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN) admin: CurrentUser,
   ) {
+    console.log({ admin });
     return this.client.send('product.category.create', categoryProductsInput);
   }
 
@@ -50,7 +51,7 @@ export class ProductsResolver {
   })
   deleteCategory(
     @Args('name') name: string,
-    @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN) admin: CurrentUser,
   ) {
     return this.client.send('product.category.delete', name);
   }
@@ -61,7 +62,7 @@ export class ProductsResolver {
   })
   createProduct(
     @Args('updateProductInput') createProductInput: CreateProdctsInput,
-    @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN) admin: CurrentUser,
   ) {
     return this.client.send('product.create', createProductInput);
   }
@@ -78,9 +79,20 @@ export class ProductsResolver {
   })
   findOneProduct(
     @Args('id', { type: () => Int }) id: number,
-    @CurrentUsers([Roles.ADMIN, Roles.CLIENT]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) admin: CurrentUser,
   ) {
     return this.client.send('product.findOne', id);
+  }
+
+  @Query(() => Product, {
+    name: 'findOneProductBySlug',
+    description: 'Consulta de un producto por medio del id',
+  })
+  findOneBySlugProduct(
+    @Args('slug', { type: () => String }) slug: string,
+    @CurrentUsers(Roles.ADMIN || Roles.CLIENT) admin: CurrentUser,
+  ) {
+    return this.client.send('product.findOneBySlug', slug);
   }
 
   @Mutation(() => Product, {
@@ -89,7 +101,7 @@ export class ProductsResolver {
   })
   updateProduct(
     @Args('updateProductInput') updateProductsInput: UpdateProductsInput,
-    @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN) admin: CurrentUser,
   ) {
     return this.client.send('product.update', updateProductsInput);
   }
@@ -99,7 +111,7 @@ export class ProductsResolver {
   })
   removeProduct(
     @Args('id', { type: () => Int }) id: number,
-    @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
+    @CurrentUsers(Roles.ADMIN) admin: CurrentUser,
   ) {
     return this.client.send('product.delete', id);
   }

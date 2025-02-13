@@ -6,6 +6,6 @@ export interface CurrentUser {
   fullName: string;
   email: string;
   telefono: number;
-  roles: Roles[];
-  direccion: Dirrecion;
+  role: Roles;
+  direccion?: Dirrecion;
 }
