@@ -113,7 +113,7 @@ input CreateProdctsInput {
   img_Products: [ImgProductsInput!]!
 
   """Categoria del producto"""
-  categoryProducts: CategoryProductsInput!
+  categoryProducts: [CategoryProductsInput!]!
 }
 
 input ImgProductsInput {
@@ -144,7 +144,7 @@ input UpdateProductsInput {
   img_Products: [ImgProductsEditInput!]
 
   """Nombre de la categoria del producto a modificar"""
-  categoryProducts: CategoryProductsInput
+  categoryProducts: [CategoryProductsEditInput!]
 }
 
 input ImgProductsEditInput {
@@ -159,6 +159,17 @@ input ImgProductsEditInput {
 
   """El estado de la imagen"""
   state_image: StateImage
+
+  """Si se desea es eliminar la imagen"""
+  delete: Boolean = false
+}
+
+input CategoryProductsEditInput {
+  """Id de la imagen del producto a modificar"""
+  id: Int
+
+  """El nombre de la categoria"""
+  name: String!
 
   """Si se desea es eliminar la imagen"""
   delete: Boolean = false

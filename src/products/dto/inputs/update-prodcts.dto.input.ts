@@ -8,7 +8,8 @@ import {
 } from 'class-validator';
 import { ImgProductsEditInput } from './sub-edit-products.dto.input';
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { CategoryProductsInput } from './category';
+
+import { CategoryProductsEditInput } from './sub-edit-category.dto.input';
 
 @InputType()
 export class UpdateProductsInput {
@@ -44,11 +45,11 @@ export class UpdateProductsInput {
   @IsArray()
   @IsOptional()
   img_Products?: ImgProductsEditInput[];
-  @Field(() => CategoryProductsInput, {
+  @Field(() => [CategoryProductsEditInput], {
     nullable: true,
     description: 'Nombre de la categoria del producto a modificar',
   })
-  @IsObject()
+  @IsArray()
   @IsOptional()
-  categoryProducts?: CategoryProductsInput;
+  categoryProducts?: CategoryProductsEditInput[];
 }

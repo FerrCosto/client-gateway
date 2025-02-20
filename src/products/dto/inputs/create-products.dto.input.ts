@@ -30,7 +30,9 @@ export class CreateProdctsInput {
   })
   @IsArray()
   img_Products: ImgProductsInput[];
-  @Field(() => CategoryProductsInput, { description: 'Categoria del producto' })
-  @IsObject()
-  categoryProducts: CategoryProductsInput;
+  @Field(() => [CategoryProductsInput], {
+    description: 'Categoria del producto',
+  })
+  @IsArray()
+  categoryProducts: CategoryProductsInput[];
 }
