@@ -50,6 +50,9 @@ type Product {
 
   """Imagenes del producto"""
   img_products: [ImgProducts!]!
+
+  """Imagenes del producto"""
+  categoryproducts: [CategoryProducts!]!
 }
 
 type Query {

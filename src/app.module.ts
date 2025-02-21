@@ -7,6 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { OrdersModule } from './orders/orders.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OrdersModule } from './orders/orders.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     OrdersModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

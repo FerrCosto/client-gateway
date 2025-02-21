@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { ImgProducts } from './';
-// import { CategoryProductsDto } from '../dtos/category';
+import { CategoryProducts, ImgProducts } from './';
 
 @ObjectType()
 export class Product {
@@ -23,6 +22,8 @@ export class Product {
   price: string;
   @Field(() => [ImgProducts], { description: 'Imagenes del producto' })
   img_products: ImgProducts[];
-
-  //   categoryproducts: CategoryProductsDto;
+  @Field(() => [CategoryProducts], {
+    description: 'Imagenes del producto',
+  })
+  categoryproducts: CategoryProducts[];
 }
