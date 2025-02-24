@@ -1,9 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
 import {
   IsArray,
+  IsInt,
   IsObject,
   IsOptional,
+  IsPositive,
   IsString,
+  Min,
   MinLength,
 } from 'class-validator';
 import { ImgProductsInput } from './sub-products.dto.input';
@@ -22,6 +25,14 @@ export class CreateProdctsInput {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @Field(() => Number, {
+    description: 'Cantidad del producto',
+  })
+  @IsInt()
+  @Min(5)
+  @IsPositive()
+  inStock: number;
   @Field(() => String, { description: 'Precio del Producto' })
   @IsString()
   price: string;

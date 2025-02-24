@@ -21,8 +21,6 @@ export class Direccion {
   address2?: string;
 }
 export class UpdateUserDto {
-  id: string;
-
   @IsString()
   @IsOptional()
   fullName?: string;

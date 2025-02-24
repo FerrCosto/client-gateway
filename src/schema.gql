@@ -109,6 +109,9 @@ input CreateProdctsInput {
   """Descripción del producto si deberia tener"""
   description: String
 
+  """Cantidad del producto"""
+  inStock: Float!
+
   """Precio del Producto"""
   price: String!
 
@@ -137,8 +140,8 @@ input UpdateProductsInput {
   """Nombre del producto a modificar"""
   name: String
 
-  """Descripción del productoa modificar"""
-  description: String
+  """Cantidad del producto"""
+  inStock: Float
 
   """Precio del producto a modificar"""
   price: String

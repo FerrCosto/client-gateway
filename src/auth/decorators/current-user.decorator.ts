@@ -9,7 +9,7 @@ import { CurrentUser } from '../interfaces';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 export const CurrentUsers = createParamDecorator(
-  (roles: Roles, context: ExecutionContext) => {
+  (roles: Roles[], context: ExecutionContext) => {
     const ctxType = context.getType<string>();
 
     let request: any;
@@ -28,7 +28,7 @@ export const CurrentUsers = createParamDecorator(
       );
     }
 
-    if (!roles) return user;
+    if (!roles || roles.length === 0) return user;
 
     if (roles.includes(user.role as Roles)) return user;
 

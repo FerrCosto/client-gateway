@@ -3,7 +3,9 @@ import {
   IsInt,
   IsObject,
   IsOptional,
+  IsPositive,
   IsString,
+  Min,
   MinLength,
 } from 'class-validator';
 import { ImgProductsEditInput } from './sub-edit-products.dto.input';
@@ -28,6 +30,15 @@ export class UpdateProductsInput {
     nullable: true,
     description: 'Descripción del productoa modificar',
   })
+  @Field(() => Number, {
+    nullable: true,
+    description: 'Cantidad del producto',
+  })
+  @IsInt()
+  @Min(5)
+  @IsPositive()
+  @IsOptional()
+  inStock?: number;
   @IsOptional()
   @IsString()
   description?: string;
