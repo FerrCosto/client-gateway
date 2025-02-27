@@ -139,7 +139,6 @@ export class OrdersController {
       const orderPaid = await firstValueFrom(
         this.client.send('order.findOnePaid', orderPaidData),
       );
-      console.log(orderPaid);
 
       const fullData = {
         user,
@@ -147,16 +146,16 @@ export class OrdersController {
       };
 
       const invoiceOrder = await firstValueFrom(
-        this.client.send('factura.create', fullData),
+        this.client.send('invoice.create', fullData),
       );
-
+      console.log({ invoiceOrder });
       response.setHeader('Content-Type', 'application/pdf');
 
       response.setHeader('Content-Disposition', 'inline; filename=factura.pdf');
       const pdf = Buffer.from(invoiceOrder, 'base64');
-
       response.end(pdf);
     } catch (error) {
+      console.log(error);
       throw new RpcException(error);
     }
   }

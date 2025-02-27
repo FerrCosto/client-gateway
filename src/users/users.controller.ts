@@ -16,7 +16,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUser } from 'src/auth/interfaces';
 import { NATS_SERVICE } from 'src/config';
 import { Roles } from './enums/roles-user.enum';
-import { catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import {
   ApiHeader,
   ApiResponse,
@@ -120,9 +120,15 @@ export class UsersController {
   ) {
     try {
       const { id: userId, ...resData } = user;
-
+      console.log({ id, userId });
       if (userId !== id)
-        throw new BadRequestException('Error no tienes privilegios');
+        return throwError(
+          () =>
+            new RpcException({
+              status: 401,
+              message: 'No tienes privilegios',
+            }),
+        );
 
       const data = {
         id,
@@ -130,12 +136,11 @@ export class UsersController {
       };
       return this.client.send('user.update', data).pipe(
         catchError((error) => {
-          throw new RpcException(error);
+          throw new RpcException(error.error);
         }),
       );
     } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Mirar los logs');
+      throw new RpcException(error);
     }
   }
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
