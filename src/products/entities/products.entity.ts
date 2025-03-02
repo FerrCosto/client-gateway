@@ -12,6 +12,8 @@ export class Product {
     description: 'Descripción del producto',
   })
   description?: string;
+  @Field(() => Number, { description: 'Cantidad de productos' })
+  inStock: number;
   @Field(() => String, {
     description: 'Slug del producto',
   })

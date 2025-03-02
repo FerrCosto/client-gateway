@@ -4,7 +4,11 @@ import { CreateProdctsInput, UpdateProductsInput } from './dto/inputs';
 import { Inject, UseGuards } from '@nestjs/common';
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy } from '@nestjs/microservices';
-import { CategoryProductsInput, FindByValueInput } from './dto/inputs/category';
+import {
+  CategoryProductsInput,
+  FindByValueInput,
+  CategoryProductsByNameInput,
+} from './dto/inputs/category';
 import { CategoryProducts } from './entities';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CurrentUsers } from 'src/auth/decorators/current-user.decorator';
@@ -33,6 +37,22 @@ export class ProductsResolver {
   })
   findAllCategories() {
     return this.client.send('product.category.finAll', {});
+  }
+
+  @Query(() => [Product], {
+    name: 'findManyByCategories',
+    description: 'Consultar productos porCategoria',
+  })
+  findManyByCategories(
+    @Args('options', { type: () => CategoryProductsByNameInput })
+    options: CategoryProductsByNameInput,
+    @CurrentUsers([Roles.CLIENT, Roles.ADMIN]) admin: CurrentUser,
+  ) {
+    try {
+      return this.client.send('product.findManyByCategories', options);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Query(() => CategoryProducts, {

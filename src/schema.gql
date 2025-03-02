@@ -39,6 +39,9 @@ type Product {
   """Descripción del producto"""
   description: String
 
+  """Cantidad de productos"""
+  inStock: Float!
+
   """Slug del producto"""
   slug: String!
 
@@ -59,6 +62,9 @@ type Query {
   """Consulta de las categorias"""
   findAllCategory: [CategoryProducts!]!
 
+  """Consultar productos porCategoria"""
+  findManyByCategories(options: CategoryProductsByNameInput!): [Product!]!
+
   """Consultar una categoria por id o nombre"""
   findOneCategory(value: FindByValueInput!): CategoryProducts!
 
@@ -70,6 +76,27 @@ type Query {
 
   """Consulta de un producto por medio del id"""
   findOneProductBySlug(slug: String!): Product!
+}
+
+input CategoryProductsByNameInput {
+  """Arreglo de nombre de categoria"""
+  categories: [CategoryNameImput!]!
+
+  """Precios para buscar"""
+  price: PriceProductInput
+}
+
+input CategoryNameImput {
+  """Nombre de la categoria"""
+  name: String!
+}
+
+input PriceProductInput {
+  """Valor minimo """
+  min: String
+
+  """Valor maximo """
+  max: String
 }
 
 input FindByValueInput {
