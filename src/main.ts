@@ -15,6 +15,12 @@ async function bootstrap() {
       },
     ],
   });
+  app.enableCors({
+    origin: 'http://localhost:3001',
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  });
   app.useGlobalFilters(new RpcCustomExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
