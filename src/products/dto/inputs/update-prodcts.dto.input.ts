@@ -26,10 +26,6 @@ export class UpdateProductsInput {
   @IsOptional()
   @MinLength(1)
   name?: string;
-  @Field(() => String, {
-    nullable: true,
-    description: 'Descripción del productoa modificar',
-  })
   @Field(() => Number, {
     nullable: true,
     description: 'Cantidad del producto',
@@ -39,6 +35,10 @@ export class UpdateProductsInput {
   @IsPositive()
   @IsOptional()
   inStock?: number;
+  @Field(() => String, {
+    nullable: true,
+    description: 'Descripción del productoa modificar',
+  })
   @IsOptional()
   @IsString()
   description?: string;

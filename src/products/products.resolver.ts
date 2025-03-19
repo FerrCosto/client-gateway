@@ -120,10 +120,11 @@ export class ProductsResolver {
     description: 'Modifiación de un producto ',
   })
   updateProduct(
-    @Args('updateProductInput') updateProductsInput: UpdateProductsInput,
+    @Args('updateProductInput') updateProductInput: UpdateProductsInput,
     @CurrentUsers([Roles.ADMIN]) admin: CurrentUser,
   ) {
-    return this.client.send('product.update', updateProductsInput);
+    console.log(updateProductInput);
+    return this.client.send('product.update', updateProductInput);
   }
   @Mutation(() => Product, {
     name: 'deleteProduct',

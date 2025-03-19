@@ -170,6 +170,9 @@ input UpdateProductsInput {
   """Cantidad del producto"""
   inStock: Float
 
+  """Descripción del productoa modificar"""
+  description: String
+
   """Precio del producto a modificar"""
   price: String
 
