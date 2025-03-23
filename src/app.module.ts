@@ -8,6 +8,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { OrdersModule } from './orders/orders.module';
 import { UsersModule } from './users/users.module';
+import { OptionsModule } from './options/options.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     }),
     OrdersModule,
     UsersModule,
+    OptionsModule,
   ],
   controllers: [],
   providers: [],
