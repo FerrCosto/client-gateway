@@ -86,13 +86,81 @@ export class OrdersController {
     status: 500,
     description: 'Internal Server Error',
   })
-  findAll(@CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser) {
+  findAllByUser(@CurrentUsers([Roles.ADMIN, Roles.CLIENT]) user: CurrentUser) {
     const { id: userId, ...data } = user;
-    return this.client.send('orders.findAll', userId).pipe(
+    return this.client.send('orders.findAllByUser', userId).pipe(
       catchError((error) => {
         throw new RpcException(error);
       }),
     );
+  }
+  @Get('findAll')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token to authenticate the request',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Devuelve todas las ordenes del usuario',
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
+  async findAll(@CurrentUsers([Roles.ADMIN]) user: CurrentUser) {
+    try {
+      const response = await firstValueFrom(
+        this.client.send('orders.findAll', {}),
+      );
+
+      if (!response || !response.orders) {
+        return { orders: [] };
+      }
+
+      // Extraer solo los datos de las órdenes
+      const ordersData = response.orders.map((o) => o.order);
+
+      if (ordersData.length === 0) {
+        return { orders: [] };
+      }
+
+      const info: any[] = await Promise.all(
+        ordersData.map(async (order) => {
+          const userOne = await firstValueFrom(
+            this.client.send('user.findOne', order.userId),
+          );
+
+          const { userId, ...resData } = order;
+          if (userId === userOne.id) {
+            return [
+              {
+                order: resData,
+                user: {
+                  id: userOne.id,
+                  email: userOne.email,
+                },
+              },
+            ];
+          }
+
+          return [];
+        }),
+      );
+
+      console.log('🔍 Información final:', JSON.stringify(info, null, 2));
+
+      return {
+        orders: info.flat().map((item) => ({
+          order: item.order,
+          user: item.user,
+        })),
+      };
+    } catch (error) {
+      console.error('❌ Error en findAll:', error);
+      throw new RpcException(error);
+    }
   }
 
   @Get('invoice')
